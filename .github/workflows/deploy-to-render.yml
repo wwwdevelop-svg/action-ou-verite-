@@ -16,7 +16,28 @@ jobs:
             echo "ERROR: RENDER_API_KEY secret is not set"; exit 1;
           fi
           echo "Triggering deploy for service $RENDER_SERVICE_ID"
-          curl -s -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys" \
+          # Trigger deploy and capture deploy id
+          resp=$(curl -s -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys" \
             -H "Authorization: Bearer $RENDER_API_KEY" \
             -H "Content-Type: application/json" \
-            -d '{"clearCache":true}'
+            -d '{"clearCache":true}')
+          echo "Trigger response: $resp"
+          deploy_id=$(echo "$resp" | python3 -c "import sys, json; print(json.load(sys.stdin).get('id',''))")
+          if [ -z "$deploy_id" ]; then
+            echo "Failed to start deploy, response: $resp"; exit 1;
+          fi
+          echo "Waiting for deploy id: $deploy_id"
+          # Poll deploy status until success or failed
+          for i in {1..120}; do
+            status_resp=$(curl -s -H "Authorization: Bearer $RENDER_API_KEY" "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys/$deploy_id")
+            status=$(echo "$status_resp" | python3 -c "import sys,json; print(json.load(sys.stdin).get('status',''))")
+            echo "Deploy status: $status"
+            if [ "$status" = "success" ]; then
+              echo "Deploy succeeded"; exit 0;
+            fi
+            if [ "$status" = "failed" ] || [ "$status" = "error" ]; then
+              echo "Deploy failed: $status_resp"; exit 1;
+            fi
+            sleep 5
+          done
+          echo "Timed out waiting for deploy to finish"; exit 1
