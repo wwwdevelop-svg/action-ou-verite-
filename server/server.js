@@ -28,16 +28,16 @@ io.on('connection', (socket) => {
     const code = makeCode();
     rooms[code] = { players: [{ id: socket.id, name }], host: socket.id };
     socket.join(code);
-    cb && cb({ ok: true, code, players: rooms[code].players });
-    io.to(code).emit('room:update', rooms[code].players);
+    cb && cb({ ok: true, code, players: rooms[code].players, host: rooms[code].host });
+    io.to(code).emit('room:update', { players: rooms[code].players, host: rooms[code].host });
   });
 
   socket.on('join_room', ({ name, code }, cb) => {
     if(!rooms[code]) return cb && cb({ ok: false, error: 'Salon introuvable' });
     rooms[code].players.push({ id: socket.id, name });
     socket.join(code);
-    cb && cb({ ok: true, code, players: rooms[code].players });
-    io.to(code).emit('room:update', rooms[code].players);
+    cb && cb({ ok: true, code, players: rooms[code].players, host: rooms[code].host });
+    io.to(code).emit('room:update', { players: rooms[code].players, host: rooms[code].host });
   });
 
   socket.on('start_game', ({ code }) => {
@@ -48,6 +48,35 @@ io.on('connection', (socket) => {
   socket.on('chat_message', ({ code, text, name }) => {
     if(!rooms[code]) return;
     io.to(code).emit('chat:message', { text, name, time: Date.now() });
+  });
+
+  // speaking (voice activity) reporting
+  socket.on('speaking', ({ code, speaking, level }) => {
+    if(!rooms[code]) return;
+    io.to(code).emit('player:speaking', { id: socket.id, speaking, level });
+  });
+
+  // moderation endpoints - only host can trigger
+  socket.on('mod:request_cam', ({ code, targetId }, cb) => {
+    const room = rooms[code]; if(!room) return cb && cb({ ok: false, error: 'Salon introuvable' });
+    if(room.host !== socket.id) return cb && cb({ ok: false, error: 'Forbidden' });
+    io.to(targetId).emit('mod:request_cam', { from: socket.id });
+    cb && cb({ ok: true });
+  });
+
+  socket.on('mod:disable_cam', ({ code, targetId }, cb) => {
+    const room = rooms[code]; if(!room) return cb && cb({ ok: false, error: 'Salon introuvable' });
+    if(room.host !== socket.id) return cb && cb({ ok: false, error: 'Forbidden' });
+    io.to(targetId).emit('mod:disable_cam', { from: socket.id });
+    cb && cb({ ok: true });
+  });
+
+  socket.on('mod:force_mic', ({ code, targetId, action }, cb) => {
+    const room = rooms[code]; if(!room) return cb && cb({ ok: false, error: 'Salon introuvable' });
+    if(room.host !== socket.id) return cb && cb({ ok: false, error: 'Forbidden' });
+    // action: 'enable' or 'disable'
+    io.to(targetId).emit('mod:force_mic', { from: socket.id, action });
+    cb && cb({ ok: true });
   });
 
   socket.on('disconnecting', () => {
