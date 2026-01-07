@@ -1,16 +1,63 @@
-:root { --bg:#0f1724; --card:#0b1220; --accent:#ff6b6b; --muted:#9aa4b2; color-scheme: dark; }
-*{box-sizing:border-box;font-family:Inter,system-ui,Arial;margin:0}
-body{background:linear-gradient(180deg,#041526 0%,#07182a 100%);color:#e6eef6;min-height:100vh;padding:24px}
+:root{
+	--bg: #121212;
+	--card: #1e1e1e;
+	--accent: #ff4757;
+	--muted: #444;
+	--text: #ffffff;
+	color-scheme: dark;
+}
+
+*{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,Arial,sans-serif;margin:0}
+
+body{
+	background:var(--bg);
+	color:var(--text);
+	min-height:100vh;
+	padding:24px;
+	text-align:center;
+}
+
 .hidden{display:none}
-#home, #lobby, #game, #webcamMenu, #chat{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
-input,select,button{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
-button{cursor:pointer;background:var(--accent);border:none;color:#fff}
+
+#home, #lobby, #game, #webcamMenu, #chat{
+	background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);
+	border-radius:12px;
+	padding:16px;
+	margin-bottom:16px;
+	box-shadow:0 6px 18px rgba(2,6,23,0.6);
+}
+
+input,select,button{padding:10px;margin:5px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+
+button{cursor:pointer;background:var(--accent);border:none;color:#fff;transition:filter .12s,transform .08s}
+button:hover{filter:brightness(1.05);transform:translateY(-1px)}
+
 #players{list-style:none;padding-left:0}
 #players li{padding:6px 0;border-bottom:1px dashed rgba(255,255,255,0.02)}
+
 #game{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
 #game button{width:140px}
+
 #localVideo{width:280px;height:180px;background:#000;border-radius:8px;object-fit:cover}
-#messages{max-height:160px;overflow:auto;padding:8px;background:#051020;border-radius:8px;margin-bottom:8px}
-#remoteCams{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+
+#chat{margin-top:20px;border-top:1px solid var(--muted);padding-top:10px}
+
+#messages{height:150px;overflow-y:auto;background:var(--card);padding:10px;margin-bottom:5px;border-radius:8px}
+
+#webcamMenu video, #remoteCams video{width:clamp(140px,18vw,220px);border-radius:10px;margin:5px;border:2px solid var(--accent);object-fit:cover}
+
+#remoteCams{display:flex;flex-wrap:wrap;justify-content:center}
+
+.talking{border:3px solid lime;box-shadow:0 0 10px rgba(0,255,0,0.12)}
+
 .small{font-size:0.9rem;color:var(--muted)}
 .center{display:flex;gap:8px;align-items:center}
+
+/* focus accessibility */
+button:focus,input:focus,select:focus{outline:3px solid rgba(255,71,87,0.18);outline-offset:2px}
+
+@media (max-width:480px){
+	#messages{height:120px}
+	#webcamMenu video,#remoteCams video{width:140px}
+	#game button{width:120px}
+}
