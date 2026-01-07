@@ -17,10 +17,19 @@ La workflow `docker-publish.yml` construit une image depuis `/server` et publie 
 
 Pour déployer automatiquement depuis l'image Docker, tu peux connecter Render / Railway / Cloud Run à la registry GHCR ou configurer un déploiement via GitHub Actions vers le provider choisi.
 
---
 Si tu veux, je peux :
-- ajouter un workflow pour déployer vers **Render** (via render-cli or GitHub integration),
-- ou ajouter un workflow pour **Cloud Run** (nécessite un secret service account).
+
+### Déployer via GitHub Actions (optionnel)
+
+Je peux ajouter un workflow qui déclenche un déploiement Render via l'API chaque fois que tu pousses sur la branche `feat/action-ou-verite`.
+
+Étapes pour l'utiliser :
+
+1. Crée une **API Key** Render (Account → API Keys).
+2. Dans ton dépôt GitHub, va dans **Settings → Secrets → Actions** et ajoute `RENDER_API_KEY` avec la valeur de l'API Key.
+3. Le workflow `deploy-to-render.yml` déclenchera un POST vers l'endpoint Render pour lancer un déploiement du service `srv-d5f9jushg0os73820bsg`.
+
+Je l'ai ajouté dans `.github/workflows/deploy-to-render.yml` et il est configuré pour la branche `feat/action-ou-verite`.
 
 ## Déploiement sur Render (recommandé pour commencer)
 
