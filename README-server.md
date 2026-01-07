@@ -21,3 +21,14 @@ Pour déployer automatiquement depuis l'image Docker, tu peux connecter Render /
 Si tu veux, je peux :
 - ajouter un workflow pour déployer vers **Render** (via render-cli or GitHub integration),
 - ou ajouter un workflow pour **Cloud Run** (nécessite un secret service account).
+
+## Déploiement sur Render (recommandé pour commencer)
+
+Le dépôt contient un `render.yaml` prêt à l'emploi pour créer un service Web Docker sur Render. Pour déployer :
+
+1. Va sur https://render.com et connecte ton compte GitHub.
+2. Crée un nouveau service, choisis **Web Service**, sélectionne ce repo et la branche `feat/action-ou-verite`.
+3. Render détectera `render.yaml` et utilisera le `Dockerfile` situé dans `server/Dockerfile`.
+4. La variable `PORT` est gérée automatiquement par Render — le serveur écoute sur `process.env.PORT || 3000`.
+
+Si tu veux que je crée un workflow GitHub Actions pour déclencher un déploiement via l'API Render (en utilisant un `RENDER_API_KEY` stocké dans les Secrets), dis‑le moi et je l'ajoute.
