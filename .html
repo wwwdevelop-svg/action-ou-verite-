@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Action ou Vérité</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>🎮 Action ou Vérité</h1>
+</header>
+
+<section id="home">
+  <input id="username" placeholder="Ton pseudo">
+  <button onclick="createRoom()">Créer un salon</button><br>
+  <input id="roomCode" placeholder="Code du salon">
+  <button onclick="joinRoom()">Rejoindre</button>
+</section>
+
+<section id="game">
+  <select id="mode">
+    <option value="classic">Classique</option>
+    <option value="adult">Adulte 🔞</option>
+    <option value="extreme">Extrême 🔥</option>
+  </select>
+
+  <div class="buttons">
+    <button onclick="choose('action')">Action</button>
+    <button onclick="choose('truth')">Vérité</button>
+  </div>
+
+  <p id="challenge">Choisis Action ou Vérité</p>
+  <p id="timer">⏱️ 30</p>
+  <button class="refuse" onclick="refuseAction()">❌ Refuser</button>
+</section>
+
+<section id="webcam">
+  <video id="localVideo" autoplay muted></video><br>
+  <button onclick="startCam()">🎥 Caméra</button>
+  <button onclick="stopCam()">⏹ Stop</button>
+  <button onclick="toggleMic()">🎤 Micro</button>
+</section>
+
+<footer>
+  <p>Action ou Vérité – Projet open-source</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
