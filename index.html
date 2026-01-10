@@ -1,51 +1,33 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Action ou Vérité</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Action ou Vérité - Dark Neon</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="container">
+    <h1>Action ou Vérité 🌌</h1>
+    
+    <div id="player-setup">
+        <input type="text" id="playerName" placeholder="Nom du joueur">
+        <button id="addPlayerBtn">Ajouter joueur</button>
+        <ul id="playerList"></ul>
+        <button id="startGameBtn" class="hidden">Commencer le jeu</button>
+    </div>
 
-<header>
-  <h1>🎮 Action ou Vérité</h1>
-</header>
+    <div id="gameArea" class="hidden">
+        <h2 id="currentPlayer"></h2>
+        <div class="buttons">
+            <button id="actionBtn">Action</button>
+            <button id="truthBtn">Vérité</button>
+        </div>
+        <div id="challenge" class="hidden"></div>
+        <button id="nextBtn" class="hidden">Joueur suivant</button>
+    </div>
+</div>
 
-<section id="home">
-  <input id="username" placeholder="Ton pseudo">
-  <button onclick="createRoom()">Créer un salon</button><br>
-  <input id="roomCode" placeholder="Code du salon">
-  <button onclick="joinRoom()">Rejoindre</button>
-</section>
-
-<section id="game">
-  <select id="mode">
-    <option value="classic">Classique</option>
-    <option value="adult">Adulte 🔞</option>
-    <option value="extreme">Extrême 🔥</option>
-  </select>
-
-  <div class="buttons">
-    <button onclick="choose('action')">Action</button>
-    <button onclick="choose('truth')">Vérité</button>
-  </div>
-
-  <p id="challenge">Choisis Action ou Vérité</p>
-  <p id="timer">⏱️ 30</p>
-  <button class="refuse" onclick="refuseAction()">❌ Refuser</button>
-</section>
-
-<section id="webcam">
-  <video id="localVideo" autoplay muted></video><br>
-  <button onclick="startCam()">🎥 Caméra</button>
-  <button onclick="stopCam()">⏹ Stop</button>
-  <button onclick="toggleMic()">🎤 Micro</button>
-</section>
-
-<footer>
-  <p>Action ou Vérité – Projet open-source</p>
-</footer>
-
-<script src="app.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
